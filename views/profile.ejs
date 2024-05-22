@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Profile</title>
+</head>
+<body>
+
+    <div class="bg-zinc-900 text-white w-full h-screen">
+        <div class="flex items-center w-full h-16 border-b border-zinc-700 shadow-lg">
+            <h1 class="ml-8"><%= loggedInUser.username %></h1>
+            <div class="ml-auto">
+                <form action="/logout" method="get">
+                    <input class="bg-blue-500 mx-6 p-2 px-6 rounded-md cursor-pointer" type="submit" value="Logout">
+                </form>
+            </div>
+        </div>
+
+        <div class="main relative border-b border-zinc-700 shadow-md flex justify-between w-full h-[250px]">
+            <div class="img rounded-full bg-slate-800 m-14 w-[150px] h-[150px]">
+               <img src="" alt="">
+            </div>
+            <div class="details absolute mt-[100px] ml-[250px]">
+                <h1 class="text-2xl">@<%= loggedInUser.username %><h1>
+            </div>
+            <h1 class="absolute ml-[253px] my-[145px] text-xl">0 Posts</h1>
+        </div>
+    </div>
+    
+</body>
+</html>

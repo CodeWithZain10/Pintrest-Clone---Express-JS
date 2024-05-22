@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Register</title>
+</head>
+<body>
+
+    <div class="bg-zinc-900 text-white w-full h-screen p-10">
+        <h1 class="text-3xl">Register Your Account</h1>
+        <div class="flex mt-10">
+            <form action="/register" method="post">
+            <input class="mx-3 border border-zinc-700 rounded-md p-2 text-black outline-none" type="text" name="username" placeholder="Username">
+            <input class="mx-3 border border-zinc-700 rounded-md p-2 text-black outline-none" type="email" name="email" placeholder="Email">
+            <input class="mx-3 border border-zinc-700 rounded-md p-2 text-black outline-none" type="password" name="password" placeholder="Password">
+            <input class="mx-3 bg-blue-500 border border-zinc-700 rounded-md p-2 text-white cursor-pointer outline-none" type="submit" name="register" value="Register Account">
+        </form>
+        </div>
+    </div>
+    
+</body>
+</html>

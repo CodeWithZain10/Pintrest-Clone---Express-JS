@@ -27,8 +27,12 @@ app.get("/register", (req, res) => {
 
 app.get("/profile", isLoggedIn, async (req, res) => {
   try {
-    let allUsers = await userModel.find();
-    res.render("profile", { users: allUsers, loggedInUser: req.user });
+    const allUsers = await userModel.find();
+    res.render("profile", {
+      users: allUsers,
+      loggedInUser: req.user,
+      profileImg: req.user.profileImg,
+    });
     console.log(req.user);
   } catch (error) {
     res.status(500).send("Error fetching users: " + error.message);
@@ -37,18 +41,20 @@ app.get("/profile", isLoggedIn, async (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    let { username, email, password } = req.body;
+    const { name, username, email, password, profileImage } = req.body;
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password, salt);
 
-    let createdUser = await userModel.create({
+    const createdUser = await userModel.create({
+      name,
       username,
       email,
       password: hash,
+      profileImage,
     });
 
-    let token = jwt.sign(
+    const token = jwt.sign(
       { email: email, username: username },
       process.env.JWT_SECRET || "hehehe"
     );
@@ -61,19 +67,24 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res) => {
   try {
-    let user = await userModel.findOne({ email: req.body.email });
-    if (!user) return res.send("Something Went Wrong");
+    const user = await userModel.findOne({ email: req.body.email });
+    if (!user) return res.send("Invalid email or password");
 
     const isMatch = await bcrypt.compare(req.body.password, user.password);
     if (isMatch) {
-      let token = jwt.sign(
-        { email: req.body.email, username: user.username },
+      const token = jwt.sign(
+        {
+          email: req.body.email,
+          username: user.username,
+          name: user.name,
+          profileImg: user.profileImage,
+        },
         process.env.JWT_SECRET || "hehehe"
       );
       res.cookie("token", token);
       res.redirect("profile");
     } else {
-      res.send("Something Went Wrong");
+      res.send("Invalid email or password");
     }
   } catch (error) {
     res.status(500).send("Error during login: " + error.message);
@@ -86,19 +97,16 @@ app.get("/logout", (req, res) => {
 });
 
 function isLoggedIn(req, res, next) {
-  if (!req.cookies.token) {
+  const token = req.cookies.token;
+  if (!token) {
     return res.send("You must be logged in");
-  } else {
-    try {
-      let data = jwt.verify(
-        req.cookies.token,
-        process.env.JWT_SECRET || "hehehe"
-      );
-      req.user = data;
-      next();
-    } catch (error) {
-      res.send("Invalid token");
-    }
+  }
+  try {
+    const data = jwt.verify(token, process.env.JWT_SECRET || "hehehe");
+    req.user = data;
+    next();
+  } catch (error) {
+    res.send("Invalid token");
   }
 }
 

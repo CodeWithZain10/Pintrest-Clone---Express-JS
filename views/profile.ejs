@@ -8,26 +8,35 @@
 </head>
 <body>
 
-    <div class="bg-zinc-900 text-white w-full h-screen">
+    <div class="bg-zinc-900 text-white w-full min-h-screen">
         <div class="flex items-center w-full h-16 border-b border-zinc-700 shadow-lg">
             <h1 class="ml-8">@<%= loggedInUser.username %></h1>
             <div class="ml-auto">
-                <form action="/logout" method="get">
-                    <input class="bg-blue-500 mx-6 p-2 px-6 rounded-md cursor-pointer" type="submit" value="Logout">
+                <a href="/createpost" class="bg-blue-500 p-2 px-6 rounded-md cursor-pointer">Create Post</a>
+                <form class="inline-block" action="/logout" method="get">
+                    <input class="bg-blue-500 mx-4 p-2 px-6 rounded-md cursor-pointer" type="submit" value="Logout">
                 </form>
             </div>
         </div>
 
         <div class="main relative border-b border-zinc-700 shadow-md flex justify-between w-full h-[250px]">
             <div class="img rounded-full bg-slate-800 m-14 w-[150px] h-[150px]">
-               <img class="rounded-full" src="<%= profileImg %>" alt="">
+               <img class="rounded-full w-full h-full" src="<%= profileImg %>" alt="">
             </div>
             <div class="details absolute mt-[100px] ml-[250px]">
-                <h1 class="text-2xl"><%= loggedInUser.name %><h1>
+                <h1 class="text-2xl"><%= loggedInUser.name %></h1>
             </div>
-            <h1 class="absolute ml-[253px] my-[145px] text-xl">0 Posts</h1>
+            <h1 class="absolute ml-[253px] my-[145px] text-xl"><%= posts.length %> Posts</h1>
         </div>
-    </div>
-    
+
+        <div class="posts w-full flex flex-wrap gap-3 justify-evenly mt-4 text-center">
+            <% posts.forEach(post => { %>
+                <div class="post mb-3 w-[300px] min-h-[430px] bg-zinc-800 shadow-lg rounded-lg">
+                    <img src="<%= post.image %>" alt="" class="rounded-lg w-full h-64 object-cover">
+                    <h1 class="text-2xl p-2 text-left text-ellipsis overflow-hidden ..."><%= post.title %></h1>
+                </div>
+            <% }) %>
+        </div>
+    </div> 
 </body>
 </html>

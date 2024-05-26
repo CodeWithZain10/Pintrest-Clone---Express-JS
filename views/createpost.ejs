@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="bg-zinc-900 text-white w-full h-screen p-10">
+        <h1 class="text-3xl">Create A Post</h1>
+        <div class="flex mt-10">
+            <form action="/createpost" method="post">
+            <input class="mx-3 border border-zinc-700 rounded-md p-2 text-black outline-none" type="text" name="title" placeholder="Title">
+            <input class="mx-3 border border-zinc-700 rounded-md p-2 text-black outline-none" type="text" name="image" placeholder="Image">
+            <input class="mx-3 bg-blue-500 border border-zinc-700 rounded-md p-2 text-white cursor-pointer outline-none" type="submit" value="Create Post">
+        </form>
+        </div>
+    </div>
+    
+</body>
+</html>

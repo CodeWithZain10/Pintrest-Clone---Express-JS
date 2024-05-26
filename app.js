@@ -1,11 +1,13 @@
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose");
 const userModel = require("./models/user");
+const postModel = require("./models/post");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const path = require("path");
+
+const app = express();
 
 app.set("view engine", "ejs");
 app.use(cookieParser());
@@ -13,8 +15,18 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-  res.render("index");
+mongoose.connect(`mongodb://127.0.0.1:27017/pintrestapp`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+app.get("/", async (req, res) => {
+  try {
+    const allPosts = await postModel.find().populate("user").exec();
+    res.render("index", { posts: allPosts });
+  } catch (error) {
+    res.status(500).send("Error fetching posts: " + error.message);
+  }
 });
 
 app.get("/login", (req, res) => {
@@ -25,17 +37,36 @@ app.get("/register", (req, res) => {
   res.render("register");
 });
 
+app.get("/createpost", isLoggedIn, (req, res) => {
+  res.render("createpost");
+});
+
 app.get("/profile", isLoggedIn, async (req, res) => {
   try {
-    const allUsers = await userModel.find();
+    const userPosts = await postModel
+      .find({ user: req.user._id })
+      .populate("user");
     res.render("profile", {
-      users: allUsers,
       loggedInUser: req.user,
-      profileImg: req.user.profileImg,
+      profileImg: req.user.profileImage,
+      posts: userPosts,
     });
-    console.log(req.user);
   } catch (error) {
-    res.status(500).send("Error fetching users: " + error.message);
+    res.status(500).send("Error fetching profile data: " + error.message);
+  }
+});
+
+app.post("/createpost", isLoggedIn, async (req, res) => {
+  try {
+    const { title, image } = req.body;
+    const newPost = await postModel.create({
+      title,
+      image,
+      user: req.user._id,
+    });
+    res.redirect("/profile");
+  } catch (error) {
+    res.status(500).send("Error creating post: " + error.message);
   }
 });
 
@@ -55,11 +86,16 @@ app.post("/register", async (req, res) => {
     });
 
     const token = jwt.sign(
-      { email: email, username: username },
+      {
+        _id: createdUser._id,
+        email: email,
+        username: username,
+        profileImg: profileImage,
+      },
       process.env.JWT_SECRET || "hehehe"
     );
     res.cookie("token", token);
-    res.send(createdUser);
+    res.redirect("/profile");
   } catch (error) {
     res.status(500).send("Error during registration: " + error.message);
   }
@@ -74,15 +110,15 @@ app.post("/login", async (req, res) => {
     if (isMatch) {
       const token = jwt.sign(
         {
+          _id: user._id,
           email: req.body.email,
           username: user.username,
-          name: user.name,
           profileImg: user.profileImage,
         },
         process.env.JWT_SECRET || "hehehe"
       );
       res.cookie("token", token);
-      res.redirect("profile");
+      res.redirect("/profile");
     } else {
       res.send("Invalid email or password");
     }
@@ -103,8 +139,11 @@ function isLoggedIn(req, res, next) {
   }
   try {
     const data = jwt.verify(token, process.env.JWT_SECRET || "hehehe");
-    req.user = data;
-    next();
+    userModel.findById(data._id).then((user) => {
+      if (!user) return res.send("Invalid token");
+      req.user = user;
+      next();
+    });
   } catch (error) {
     res.send("Invalid token");
   }

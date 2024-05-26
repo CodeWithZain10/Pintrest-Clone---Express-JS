@@ -6,329 +6,101 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Document</title>
+    <style>
+        .masonry {
+            column-count: 1;
+            column-gap: 1rem;
+        }
+
+        @media(min-width: 640px) {
+            .masonry {
+                column-count: 2;
+            }
+        }
+
+        @media(min-width: 1024px) {
+            .masonry {
+                column-count: 3;
+            }
+        }
+
+        .masonry-item {
+            display: inline-block;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: auto;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-wrapper:hover .overlay {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="navbar w-full h-16 bg-zinc-900 shadow-lg text-white sticky top-0 z-50 flex justify-between items-center px-4">
-        <ul class="flex items-center space-x-6 cursor-pointer">
-            <li class="text-xl">Home</li>
-            <!-- Add other left-aligned nav items here -->
-        </ul>
-        <ul class="flex items-center space-x-6 cursor-pointer">
-            <li><a href="/login">Login</a></li>
-            <li><a href="/register">Sign Up</a></li>
-        </ul>
-    </div>
+<div class="navbar w-full h-16 bg-zinc-900 shadow-lg text-white sticky top-0 z-50 flex justify-between items-center px-4">
+    <ul class="flex items-center space-x-6 cursor-pointer">
+        <li class="text-xl"><a href="/">Home</a></li>
+    </ul>
+    <ul class="flex items-center space-x-6 cursor-pointer">
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Sign Up</a></li>
+    </ul>
+</div>
 
-<div class="container">
-    <div class="column">
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/1408221/pexels-photo-1408221.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Pink flowers</p>
-      </div>
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/736230/pexels-photo-736230.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Cool image</p>
-      </div>
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/2350377/pexels-photo-2350377.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Cool image</p>
-      </div>
-      
+<div class="container mx-auto mt-4">
+    <div class="masonry">
+        <% posts.forEach(post => { %>
+            <div class="masonry-item w-[300px] h-[200pxs] bg-white rounded-lg shadow-lg overflow-hidden">
+                <div class="image-wrapper">
+                    <div class="overlay">
+                        <div>
+                            <p class="text-white">Creator: <%= post.user.username %></p>
+                            <button class="save bg-red-500 text-white py-1 px-3 rounded">Save</button>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="spheric-button bg-white text-black py-1 px-3 rounded">
+                                <a href="https://twitter.com" target="_blank">twitter.com</a>
+                            </button>
+                            <button class="round-button bg-white rounded-full p-2">
+                                <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="Icon" class="w-6 h-6">
+                            </button>
+                            <button class="round-button bg-white rounded-full p-2">
+                                <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="Icon" class="w-6 h-6">
+                            </button>
+                        </div>
+                    </div>
+                    <img src="<%= post.image %>" alt="<%= post.title %>" class="w-full h-auto">
+                </div>
+                <p class="p-4 text-lg font-semibold"><%= post.title %></p>
+            </div>
+        <% }); %>
     </div>
-    <div class="column">
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/3601531/pexels-photo-3601531.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Pink flowers</p>
-      </div>
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/772520/pexels-photo-772520.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Cool image</p>
-      </div>
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/3262437/pexels-photo-3262437.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Cool image</p>
-      </div>
-    </div>
-    <div class="column">
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/1697912/pexels-photo-1697912.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Pink flowers</p>
-      </div>
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/1591140/pexels-photo-1591140.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Cool image</p>
-      </div>
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/2057047/pexels-photo-2057047.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Cool image</p>
-      </div>
-    </div>
-    <div class="column">
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/60909/rose-yellow-flower-petals-60909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Cool image</p>
-      </div>
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/4121204/pexels-photo-4121204.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Cool image</p>
-      </div>
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/4122767/pexels-photo-4122767.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Cool image</p>
-      </div>
-      <div class="content-wrapper">
-        <div class="image-wrapper">
-          <div class="overlay">
-          <div>
-            <p>Creator</p>
-            <button class="save">Save</button>
-          </div>
-          <div>
-            <button class="spheric-button">
-              twitter.com
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/3580/3580382.png" alt="">
-            </button>
-            <button class="round-button">
-              <img src="https://cdn-icons-png.flaticon.com/512/512/512142.png" alt="">
-            </button>
-          </div>
-        </div>
-           <img src="https://images.pexels.com/photos/2626152/pexels-photo-2626152.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="">
-        </div>
-        <p>Cool image</p>
-      </div>
-    </div>
-  </div>
+</div>
+
 </body>
 </html>

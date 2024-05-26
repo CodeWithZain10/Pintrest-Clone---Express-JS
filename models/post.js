@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const postSchema = mongoose.Schema({
   title: String,
+  image: String,
   date: {
     type: Date,
     default: Date.now,
